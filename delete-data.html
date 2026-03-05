@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReHelp - Data Deletion Request</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 64px;
+            margin-bottom: 10px;
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 18px;
+            opacity: 0.95;
+        }
+        
+        .lang-selector {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .lang-selector select {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            background: white;
+            color: #667eea;
+            cursor: pointer;
+            font-weight: 600;
+            outline: none;
+            min-width: 200px;
+        }
+        
+        .lang-selector select:hover {
+            background: #f8f9ff;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .lang-content {
+            display: none;
+        }
+        
+        .lang-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section {
+            margin-bottom: 35px;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #f0f0f0;
+        }
+        
+        .section h3 {
+            color: #555;
+            font-size: 22px;
+            margin: 25px 0 15px 0;
+        }
+        
+        .section p, .section li {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #666;
+        }
+        
+        .section ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .important-note {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%);
+            border-left: 5px solid #ffc107;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .important-note strong {
+            color: #856404;
+            font-size: 18px;
+        }
+        
+        .contact-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 35px;
+            border-radius: 12px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .contact-box h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+        
+        .email-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px 45px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .email-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+        
+        .steps {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+        
+        .steps h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .steps ol {
+            margin-left: 25px;
+        }
+        
+        .steps li {
+            margin-bottom: 15px;
+            padding-left: 10px;
+            font-size: 16px;
+        }
+        
+        .footer {
+            background: #2d3748;
+            padding: 35px;
+            text-align: center;
+            color: white;
+        }
+        
+        .footer p {
+            margin-bottom: 8px;
+        }
+        
+        .checkmark {
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                margin: 20px auto;
+                border-radius: 0;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 28px;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .section h2 {
+                font-size: 24px;
+            }
+            
+            .lang-selector select {
+                min-width: 160px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🛡️</div>
+            <h1>ReHelp</h1>
+            <p>Data Deletion Request</p>
+        </div>
+        
+        <div class="lang-selector">
+            <label for="language-select" style="margin-right: 10px; font-weight: 600; color: #667eea;">Select Language:</label>
+            <select id="language-select" onchange="switchLanguage(this.value)">
+                <option value="en">🇬🇧 English</option>
+                <option value="uk">🇺🇦 Українська</option>
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="it">🇮🇹 Italiano</option>
+                <option value="pl">🇵🇱 Polski</option>
+                <option value="pt">🇵🇹 Português</option>
+            </select>
+        </div>
+        
+        <div class="content">
+            <!-- ENGLISH -->
+            <div id="en" class="lang-content active">
+                <div class="section">
+                    <h2>Delete Your Data</h2>
+                    <p>ReHelp respects your right to privacy and data protection. You can request deletion of all your data at any time.</p>
+                </div>
+                
+                <div class="important-note">
+                    <p><strong>⚠️ Important:</strong> ReHelp uses an <strong>"offline-first"</strong> architecture. All your data is stored <strong>LOCALLY on your device</strong>, not on our servers. This means you already have full control over your data!</p>
+                </div>
+                
+                <div class="section">
+                    <h3>What data does ReHelp store?</h3>
+                    <p><strong>Locally on your phone:</strong></p>
+                    <ul>
+                        <li>Your ReHelp ID</li>
+                        <li>Your Circle contacts list</li>
+                        <li>Medical card information (if added)</li>
+                        <li>SOS alert history</li>
+                        <li>App settings and preferences</li>
+                    </ul>
+                    <p><strong>NOT stored on our servers:</strong></p>
+                    <ul>
+                        <li>No cloud backups</li>
+                        <li>No tracking or analytics</li>
+                        <li>No personal information on external servers</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3>How to delete your data:</h3>
+                    
+                    <div class="steps">
+                        <h4>Method 1: Uninstall the app (Easiest)</h4>
+                        <ol>
+                            <li>Open your Android Settings</li>
+                            <li>Go to Apps → ReHelp</li>
+                            <li>Tap "Uninstall"</li>
+                            <li><span class="checkmark">✅</span> All your data is automatically deleted from your device!</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="steps">
+                        <h4>Method 2: Clear app data</h4>
+                        <ol>
+                            <li>Android Settings → Apps → ReHelp</li>
+                            <li>Storage → Clear Data</li>
+                            <li><span class="checkmark">✅</span> All data deleted (app remains installed)</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="steps">
+                        <h4>Method 3: Email deletion request</h4>
+                        <p>If you want written confirmation of data deletion or have questions, you can contact us via email:</p>
+                    </div>
+                </div>
+                
+                <div class="contact-box">
+                    <h3>Submit Deletion Request</h3>
+                    <p>Click the button below to send us an email request:</p>
+                    <a href="mailto:shortmainstory@gmail.com?subject=ReHelp Data Deletion Request&body=Please confirm deletion of my data from ReHelp.%0D%0A%0D%0AMy ReHelp ID: [INSERT YOUR ID HERE]%0D%0A%0D%0AThank you!" class="email-link">
+                        📧 Send Deletion Request
+                    </a>
+                    <p style="margin-top: 15px; font-size: 14px; color: #666;">
+                        We will confirm deletion within 48 hours
+                    </p>
+                </div>
+                
+                <div class="section">
+                    <h3>What happens after deletion?</h3>
+                    <ul>
+                        <li><span class="checkmark">✅</span> All your local data is permanently deleted</li>
+                        <li><span class="checkmark">✅</span> Your ReHelp ID becomes inactive</li>
+                        <li><span class="checkmark">✅</span> Circle contacts will no longer receive alerts from you</li>
+                        <li><span class="checkmark">✅</span> SOS alert history is removed</li>
+                        <li><span class="checkmark">✅</span> Medical card information is deleted</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3>Processing Time</h3>
+                    <p><strong>Local deletion (Methods 1 & 2):</strong> Immediate</p>
+                    <p><strong>Email confirmation (Method 3):</strong> Within 48 hours</p>
+                </div>
+            </div>
+            
+            <!-- UKRAINIAN -->
+            <div id="uk" class="lang-content">
+                <div class="section">
+                    <h2>Видалення Ваших Даних</h2>
+                    <p>ReHelp поважає Ваше право на конфіденційність і захист даних. Ви можете запросити видалення всіх Ваших даних у будь-який час.</p>
+                </div>
+                
+                <div class="important-note">
+                    <p><strong>⚠️ Важливо:</strong> ReHelp використовує архітектуру <strong>"офлайн-перший"</strong>. Всі Ваші дані зберігаються <strong>ЛОКАЛЬНО на Вашому пристрої</strong>, а не на наших серверах. Це означає, що Ви вже маєте повний контроль над своїми даними!</p>
+                </div>
+                
+                <div class="section">
+                    <h3>Які дані зберігає ReHelp?</h3>
+                    <p><strong>Локально на Вашому телефоні:</strong></p>
+                    <ul>
+                        <li>Ваш ReHelp ID</li>
+                        <li>Список контактів кола безпеки</li>
+                        <li>Інформація медичної картки (якщо додана)</li>
+                        <li>Історія SOS сповіщень</li>
+                        <li>Налаштування додатка</li>
+                    </ul>
+                    <p><strong>НЕ зберігається на наших серверах:</strong></p>
+                    <ul>
+                        <li>Жодних хмарних копій</li>
+                        <li>Жодного відстеження чи аналітики</li>
+                        <li>Жодної особистої інформації на зовнішніх серверах</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3>Як видалити дані:</h3>
+                    
+                    <div class="steps">
+                        <h4>Спосіб 1: Видалити додаток (Найпростіше)</h4>
+                        <ol>
+                            <li>Відкрийте налаштування Android</li>
+                            <li>Перейдіть до Додатки → ReHelp</li>
+                            <li>Натисніть "Видалити"</li>
+                            <li><span class="checkmark">✅</span> Всі Ваші дані автоматично видалено з пристрою!</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="steps">
+                        <h4>Спосіб 2: Очистити дані додатка</h4>
+                        <ol>
+                            <li>Налаштування Android → Додатки → ReHelp</li>
+                            <li>Пам'ять → Очистити дані</li>
+                            <li><span class="checkmark">✅</span> Всі дані видалено (додаток залишається)</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="steps">
+                        <h4>Спосіб 3: Запит через email</h4>
+                        <p>Якщо Ви бажаєте отримати письмове підтвердження видалення або маєте питання:</p>
+                    </div>
+                </div>
+                
+                <div class="contact-box">
+                    <h3>Надіслати запит на видалення</h3>
+                    <p>Натисніть кнопку нижче, щоб надіслати нам email:</p>
+                    <a href="mailto:shortmainstory@gmail.com?subject=Запит на видалення даних ReHelp&body=Будь ласка, підтвердіть видалення моїх даних з ReHelp.%0D%0A%0D%0AМій ReHelp ID: [ВСТАВТЕ ВАШ ID]%0D%0A%0D%0AДякую!" class="email-link">
+                        📧 Надіслати запит на видалення
+                    </a>
+                    <p style="margin-top: 15px; font-size: 14px; color: #666;">
+                        Ми підтвердимо видалення протягом 48 годин
+                    </p>
+                </div>
+                
+                <div class="section">
+                    <h3>Що відбувається після видалення?</h3>
+                    <ul>
+                        <li><span class="checkmark">✅</span> Всі Ваші локальні дані повністю видалено</li>
+                        <li><span class="checkmark">✅</span> Ваш ReHelp ID стає неактивним</li>
+                        <li><span class="checkmark">✅</span> Контакти кола більше не отримують сповіщення від Вас</li>
+                        <li><span class="checkmark">✅</span> Історія SOS сповіщень видалена</li>
+                        <li><span class="checkmark">✅</span> Інформація медичної картки видалена</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3>Термін виконання</h3>
+                    <p><strong>Локальне видалення (Способи 1 і 2):</strong> Миттєво</p>
+                    <p><strong>Підтвердження email (Спосіб 3):</strong> До 48 годин</p>
+                </div>
+            </div>
+            
+            <!-- GERMAN -->
+            <div id="de" class="lang-content">
+                <div class="section">
+                    <h2>Ihre Daten löschen</h2>
+                    <p>ReHelp respektiert Ihr Recht auf Privatsphäre und Datenschutz. Sie können jederzeit die Löschung aller Ihrer Daten anfordern.</p>
+                </div>
+                
+                <div class="important-note">
+                    <p><strong>⚠️ Wichtig:</strong> ReHelp verwendet eine <strong>"Offline-First"</strong>-Architektur. Alle Ihre Daten werden <strong>LOKAL auf Ihrem Gerät</strong> gespeichert, nicht auf unseren Servern. Das bedeutet, Sie haben bereits die volle Kontrolle über Ihre Daten!</p>
+                </div>
+                
+                <div class="section">
+                    <h3>Welche Daten speichert ReHelp?</h3>
+                    <p><strong>Lokal auf Ihrem Telefon:</strong></p>
+                    <ul>
+                        <li>Ihre ReHelp-ID</li>
+                        <li>Ihre Circle-Kontaktliste</li>
+                        <li>Medizinische Karteninformationen (falls hinzugefügt)</li>
+                        <li>SOS-Benachrichtigungsverlauf</li>
+                        <li>App-Einstellungen</li>
+                    </ul>
+                    <p><strong>NICHT auf unseren Servern gespeichert:</strong></p>
+                    <ul>
+                        <li>Keine Cloud-Backups</li>
+                        <li>Kein Tracking oder Analytics</li>
+                        <li>Keine persönlichen Informationen auf externen Servern</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3>So löschen Sie Ihre Daten:</h3>
+                    
+                    <div class="steps">
+                        <h4>Methode 1: App deinstallieren (Am einfachsten)</h4>
+                        <ol>
+                            <li>Öffnen Sie Ihre Android-Einstellungen</li>
+                            <li>Gehen Sie zu Apps → ReHelp</li>
+                            <li>Tippen Sie auf "Deinstallieren"</li>
+                            <li><span class="checkmark">✅</span> Alle Ihre Daten werden automatisch von Ihrem Gerät gelöscht!</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="steps">
+                        <h4>Methode 2: App-Daten löschen</h4>
+                        <ol>
+                            <li>Android-Einstellungen → Apps → ReHelp</li>
+                            <li>Speicher → Daten löschen</li>
+                            <li><span class="checkmark">✅</span> Alle Daten gelöscht (App bleibt installiert)</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="steps">
+                        <h4>Methode 3: E-Mail-Löschungsanfrage</h4>
+                        <p>Wenn Sie eine schriftliche Bestätigung der Datenlöschung wünschen oder Fragen haben:</p>
+                    </div>
+                </div>
+                
+                <div class="contact-box">
+                    <h3>Löschungsanfrage senden</h3>
+                    <p>Klicken Sie auf die Schaltfläche unten, um uns eine E-Mail zu senden:</p>
+                    <a href="mailto:shortmainstory@gmail.com?subject=ReHelp Datenlöschungsanfrage&body=Bitte bestätigen Sie die Löschung meiner Daten von ReHelp.%0D%0A%0D%0AMeine ReHelp-ID: [FÜGEN SIE IHRE ID EIN]%0D%0A%0D%0AVielen Dank!" class="email-link">
+                        📧 Löschungsanfrage senden
+                    </a>
+                    <p style="margin-top: 15px; font-size: 14px; color: #666;">
+                        Wir bestätigen die Löschung innerhalb von 48 Stunden
+                    </p>
+                </div>
+                
+                <div class="section">
+                    <h3>Was passiert nach der Löschung?</h3>
+                    <ul>
+                        <li><span class="checkmark">✅</span> Alle Ihre lokalen Daten werden dauerhaft gelöscht</li>
+                        <li><span class="checkmark">✅</span> Ihre ReHelp-ID wird inaktiv</li>
+                        <li><span class="checkmark">✅</span> Circle-Kontakte erhalten keine Benachrichtigungen mehr von Ihnen</li>
+                        <li><span class="checkmark">✅</span> SOS-Benachrichtigungsverlauf wird entfernt</li>
+                        <li><span class="checkmark">✅</span> Medizinische Karteninformationen werden gelöscht</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3>Bearbeitungszeit</h3>
+                    <p><strong>Lokale Löschung (Methoden 1 & 2):</strong> Sofort</p>
+                    <p><strong>E-Mail-Bestätigung (Methode 3):</strong> Innerhalb von 48 Stunden</p>
+                </div>
+            </div>
+            
+            <!-- SPANISH -->
+            <div id="es" class="lang-content">
+                <div class="section">
+                    <h2>Eliminar tus datos</h2>
+                    <p>ReHelp respeta tu derecho a la privacidad y protección de datos. Puedes solicitar la eliminación de todos tus datos en cualquier momento.</p>
+                </div>
+                
+                <div class="important-note">
+                    <p><strong>⚠️ Importante:</strong> ReHelp utiliza una arquitectura <strong>"offline-first"</strong>. Todos tus datos se almacenan <strong>LOCALMENTE en tu dispositivo</strong>, no en nuestros servidores. ¡Esto significa que ya tienes control total sobre tus datos!</p>
+                </div>
+                
+                <div class="section">
+                    <h3>¿Qué datos almacena ReHelp?</h3>
+                    <p><strong>Localmente en tu teléfono:</strong></p>
+                    <ul>
+                        <li>Tu ID de ReHelp</li>
+                        <li>Tu lista de contactos del Circle</li>
+                        <li>Información de la tarjeta médica (si se agregó)</li>
+                        <li>Historial de alertas SOS</li>
+                        <li>Configuración de la aplicación</li>
+                    </ul>
+                    <p><strong>NO almacenado en nuestros servidores:</strong></p>
+                    <ul>
+                        <li>Sin copias de seguridad en la nube</li>
+                        <li>Sin seguimiento ni análisis</li>
+                        <li>Sin información personal en servidores externos</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3>Cómo eliminar tus datos:</h3>
+                    
+                    <div class="steps">
+                        <h4>Método 1: Desinstalar la aplicación (Más fácil)</h4>
+                        <ol>
+                            <li>Abre la configuración de Android</li>
+                            <li>Ve a Aplicaciones → ReHelp</li>
+                            <li>Toca "Desinstalar"</li>
+                            <li><span class="checkmark">✅</span> ¡Todos tus datos se eliminan automáticamente de tu dispositivo!</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="steps">
+                        <h4>Método 2: Borrar datos de la aplicación</h4>
+                        <ol>
+                            <li>Configuración de Android → Aplicaciones → ReHelp</li>
+                            <li>Almacenamiento → Borrar datos</li>
+                            <li><span class="checkmark">✅</span> Todos los datos eliminados (la aplicación permanece instalada)</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="steps">
+                        <h4>Método 3: Solicitud por correo electrónico</h4>
+                        <p>Si deseas confirmación por escrito de la eliminación de datos o tienes preguntas:</p>
+                    </div>
+                </div>
+                
+                <div class="contact-box">
+                    <h3>Enviar solicitud de eliminación</h3>
+                    <p>Haz clic en el botón de abajo para enviarnos un correo electrónico:</p>
+                    <a href="mailto:shortmainstory@gmail.com?subject=Solicitud de eliminación de datos de ReHelp&body=Por favor, confirme la eliminación de mis datos de ReHelp.%0D%0A%0D%0AMi ID de ReHelp: [INSERTE SU ID AQUÍ]%0D%0A%0D%0A¡Gracias!" class="email-link">
+                        📧 Enviar solicitud de eliminación
+                    </a>
+                    <p style="margin-top: 15px; font-size: 14px; color: #666;">
+                        Confirmaremos la eliminación en 48 horas
+                    </p>
+                </div>
+                
+                <div class="section">
+                    <h3>¿Qué sucede después de la eliminación?</h3>
+                    <ul>
+                        <li><span class="checkmark">✅</span> Todos tus datos locales se eliminan permanentemente</li>
+                        <li><span class="checkmark">✅</span> Tu ID de ReHelp se vuelve inactivo</li>
+                        <li><span class="checkmark">✅</span> Los contactos del Circle ya no recibirán alertas tuyas</li>
+                        <li><span class="checkmark">✅</span> El historial de alertas SOS se elimina</li>
+                        <li><span class="checkmark">✅</span> La información de la tarjeta médica se elimina</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3>Tiempo de procesamiento</h3>
+                    <p><strong>Eliminación local (Métodos 1 y 2):</strong> Inmediata</p>
+                    <p><strong>Confirmación por correo electrónico (Método 3):</strong> En 48 horas</p>
+                </div>
+            </div>
+            
+            <!-- FRENCH -->
+            <div id="fr" class="lang-content">
+                <div class="section">
+                    <h2>Supprimer vos données</h2>
+                    <p>ReHelp respecte votre droit à la vie privée et à la protection des données. Vous pouvez demander la suppression de toutes vos données à tout moment.</p>
+                </div>
+                
+                <div class="important-note">
+                    <p><strong>⚠️ Important :</strong> ReHelp utilise une architecture <strong>"hors ligne d'abord"</strong>. Toutes vos données sont stockées <strong>LOCALEMENT sur votre appareil</strong>, pas sur nos serveurs. Cela signifie que vous avez déjà un contrôle total sur vos données !</p>
+                </div>
+                
+                <div class="section">
+                    <h3>Quelles données ReHelp stocke-t-il ?</h3>
+                    <p><strong>Localement sur votre téléphone :</strong></p>
+                    <ul>
+                        <li>Votre identifiant ReHelp</li>
+                        <li>Votre liste de contacts Circle</li>
+                        <li>Informations de la carte médicale (si ajoutée)</li>
+                        <li>Historique des alertes SOS</li>
+                        <li>Paramètres de l'application</li>
+                    </ul>
+                    <p><strong>PAS stocké sur nos serveurs :</strong></p>
+                    <ul>
+                        <li>Pas de sauvegardes cloud</li>
+                        <li>Pas de suivi ni d'analyse</li>
+                        <li>Pas d'informations personnelles sur des serveurs externes</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3>Comment supprimer vos données :</h3>
+                    
+                    <div class="steps">
+                        <h4>Méthode 1 : Désinstaller l'application (Le plus simple)</h4>
+                        <ol>
+                            <li>Ouvrez vos paramètres Android</li>
+                            <li>Allez dans Applications → ReHelp</li>
+                            <li>Appuyez sur "Désinstaller"</li>
+                            <li><span class="checkmark">✅</span> Toutes vos données sont automatiquement supprimées de votre appareil !</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="steps">
+                        <h4>Méthode 2 : Effacer les données de l'application</h4>
+                        <ol>
+                            <li>Paramètres Android → Applications → ReHelp</li>
+                            <li>Stockage → Effacer les données</li>
+                            <li><span class="checkmark">✅</span> Toutes les données supprimées (l'application reste installée)</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="steps">
+                        <h4>Méthode 3 : Demande par e-mail</h4>
+                        <p>Si vous souhaitez une confirmation écrite de la suppression des données ou si vous avez des questions :</p>
+                    </div>
+                </div>
+                
+                <div class="contact-box">
+                    <h3>Soumettre une demande de suppression</h3>
+                    <p>Cliquez sur le bouton ci-dessous pour nous envoyer un e-mail :</p>
+                    <a href="mailto:shortmainstory@gmail.com?subject=Demande de suppression de données ReHelp&body=Veuillez confirmer la suppression de mes données de ReHelp.%0D%0A%0D%0AMon identifiant ReHelp : [INSÉREZ VOTRE ID ICI]%0D%0A%0D%0AMerci !" class="email-link">
+                        📧 Envoyer une demande de suppression
+                    </a>
+                    <p style="margin-top: 15px; font-size: 14px; color: #666;">
+                        Nous confirmerons la suppression dans les 48 heures
+                    </p>
+                </div>
+                
+                <div class="section">
+                    <h3>Que se passe-t-il après la suppression ?</h3>
+                    <ul>
+                        <li><span class="checkmark">✅</span> Toutes vos données locales sont définitivement supprimées</li>
+                        <li><span class="checkmark">✅</span> Votre identifiant ReHelp devient inactif</li>
+                        <li><span class="checkmark">✅</span> Les contacts Circle ne recevront plus d'alertes de votre part</li>
+                        <li><span class="checkmark">✅</span> L'historique des alertes SOS est supprimé</li>
+                        <li><span class="checkmark">✅</span> Les informations de la carte médicale sont supprimées</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3>Délai de traitement</h3>
+                    <p><strong>Suppression locale (Méthodes 1 et 2) :</strong> Immédiate</p>
+                    <p><strong>Confirmation par e-mail (Méthode 3) :</strong> Dans les 48 heures</p>
+                </div>
+            </div>
+            
+            <!-- ITALIAN -->
+            <div id="it" class="lang-content">
+                <div class="section">
+                    <h2>Elimina i tuoi dati</h2>
+                    <p>ReHelp rispetta il tuo diritto alla privacy e alla protezione dei dati. Puoi richiedere la cancellazione di tutti i tuoi dati in qualsiasi momento.</p>
+                </div>
+                
+                <div class="important-note">
+                    <p><strong>⚠️ Importante:</strong> ReHelp utilizza un'architettura <strong>"offline-first"</strong>. Tutti i tuoi dati sono archiviati <strong>LOCALMENTE sul tuo dispositivo</strong>, non sui nostri server. Questo significa che hai già il pieno controllo sui tuoi dati!</p>
+                </div>
+                
+                <div class="section">
+                    <h3>Quali dati memorizza ReHelp?</h3>
+                    <p><strong>Localmente sul tuo telefono:</strong></p>
+                    <ul>
+                        <li>Il tuo ID ReHelp</li>
+                        <li>La tua lista contatti Circle</li>
+                        <li>Informazioni della scheda medica (se aggiunta)</li>
+                        <li>Cronologia degli avvisi SOS</li>
+                        <li>Impostazioni dell'app</li>
+                    </ul>
+                    <p><strong>NON archiviato sui nostri server:</strong></p>
+                    <ul>
+                        <li>Nessun backup cloud</li>
+                        <li>Nessun tracciamento o analisi</li>
+                        <li>Nessuna informazione personale su server esterni</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3>Come eliminare i tuoi dati:</h3>
+                    
+                    <div class="steps">
+                        <h4>Metodo 1: Disinstalla l'app (Il più semplice)</h4>
+                        <ol>
+                            <li>Apri le impostazioni Android</li>
+                            <li>Vai su App → ReHelp</li>
+                            <li>Tocca "Disinstalla"</li>
+                            <li><span class="checkmark">✅</span> Tutti i tuoi dati vengono automaticamente eliminati dal tuo dispositivo!</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="steps">
+                        <h4>Metodo 2: Cancella i dati dell'app</h4>
+                        <ol>
+                            <li>Impostazioni Android → App → ReHelp</li>
+                            <li>Archiviazione → Cancella dati</li>
+                            <li><span class="checkmark">✅</span> Tutti i dati cancellati (l'app rimane installata)</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="steps">
+                        <h4>Metodo 3: Richiesta via email</h4>
+                        <p>Se desideri una conferma scritta della cancellazione dei dati o hai domande:</p>
+                    </div>
+                </div>
+                
+                <div class="contact-box">
+                    <h3>Invia richiesta di cancellazione</h3>
+                    <p>Clicca sul pulsante qui sotto per inviarci un'email:</p>
+                    <a href="mailto:shortmainstory@gmail.com?subject=Richiesta di cancellazione dati ReHelp&body=Si prega di confermare la cancellazione dei miei dati da ReHelp.%0D%0A%0D%0AIl mio ID ReHelp: [INSERISCI IL TUO ID QUI]%0D%0A%0D%0AGrazie!" class="email-link">
+                        📧 Invia richiesta di cancellazione
+                    </a>
+                    <p style="margin-top: 15px; font-size: 14px; color: #666;">
+                        Confermeremo la cancellazione entro 48 ore
+                    </p>
+                </div>
+                
+                <div class="section">
+                    <h3>Cosa succede dopo la cancellazione?</h3>
+                    <ul>
+                        <li><span class="checkmark">✅</span> Tutti i tuoi dati locali vengono eliminati permanentemente</li>
+                        <li><span class="checkmark">✅</span> Il tuo ID ReHelp diventa inattivo</li>
+                        <li><span class="checkmark">✅</span> I contatti Circle non riceveranno più avvisi da te</li>
+                        <li><span class="checkmark">✅</span> La cronologia degli avvisi SOS viene rimossa</li>
+                        <li><span class="checkmark">✅</span> Le informazioni della scheda medica vengono eliminate</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3>Tempo di elaborazione</h3>
+                    <p><strong>Cancellazione locale (Metodi 1 e 2):</strong> Immediata</p>
+                    <p><strong>Conferma via email (Metodo 3):</strong> Entro 48 ore</p>
+                </div>
+            </div>
+            
+            <!-- POLISH -->
+            <div id="pl" class="lang-content">
+                <div class="section">
+                    <h2>Usuń swoje dane</h2>
+                    <p>ReHelp szanuje Twoje prawo do prywatności i ochrony danych. Możesz w każdej chwili poprosić o usunięcie wszystkich swoich danych.</p>
+                </div>
+                
+                <div class="important-note">
+                    <p><strong>⚠️ Ważne:</strong> ReHelp wykorzystuje architekturę <strong>"offline-first"</strong>. Wszystkie Twoje dane są przechowywane <strong>LOKALNIE na Twoim urządzeniu</strong>, a nie na naszych serwerach. Oznacza to, że już masz pełną kontrolę nad swoimi danymi!</p>
+                </div>
+                
+                <div class="section">
+                    <h3>Jakie dane przechowuje ReHelp?</h3>
+                    <p><strong>Lokalnie na Twoim telefonie:</strong></p>
+                    <ul>
+                        <li>Twój identyfikator ReHelp</li>
+                        <li>Twoja lista kontaktów Circle</li>
+                        <li>Informacje z karty medycznej (jeśli dodane)</li>
+                        <li>Historia alertów SOS</li>
+                        <li>Ustawienia aplikacji</li>
+                    </ul>
+                    <p><strong>NIE przechowywane na naszych serwerach:</strong></p>
+                    <ul>
+                        <li>Brak kopii zapasowych w chmurze</li>
+                        <li>Brak śledzenia lub analityki</li>
+                        <li>Brak danych osobowych na zewnętrznych serwerach</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3>Jak usunąć swoje dane:</h3>
+                    
+                    <div class="steps">
+                        <h4>Metoda 1: Odinstaluj aplikację (Najłatwiejsza)</h4>
+                        <ol>
+                            <li>Otwórz ustawienia Android</li>
+                            <li>Przejdź do Aplikacje → ReHelp</li>
+                            <li>Dotknij "Odinstaluj"</li>
+                            <li><span class="checkmark">✅</span> Wszystkie Twoje dane zostaną automatycznie usunięte z urządzenia!</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="steps">
+                        <h4>Metoda 2: Wyczyść dane aplikacji</h4>
+                        <ol>
+                            <li>Ustawienia Android → Aplikacje → ReHelp</li>
+                            <li>Pamięć → Wyczyść dane</li>
+                            <li><span class="checkmark">✅</span> Wszystkie dane usunięte (aplikacja pozostaje zainstalowana)</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="steps">
+                        <h4>Metoda 3: Wniosek przez e-mail</h4>
+                        <p>Jeśli chcesz pisemnego potwierdzenia usunięcia danych lub masz pytania:</p>
+                    </div>
+                </div>
+                
+                <div class="contact-box">
+                    <h3>Wyślij wniosek o usunięcie</h3>
+                    <p>Kliknij przycisk poniżej, aby wysłać nam e-mail:</p>
+                    <a href="mailto:shortmainstory@gmail.com?subject=Wniosek o usunięcie danych ReHelp&body=Proszę potwierdzić usunięcie moich danych z ReHelp.%0D%0A%0D%0AMój identyfikator ReHelp: [WSTAW TUTAJ SWÓJ ID]%0D%0A%0D%0ADziękuję!" class="email-link">
+                        📧 Wyślij wniosek o usunięcie
+                    </a>
+                    <p style="margin-top: 15px; font-size: 14px; color: #666;">
+                        Potwierdzimy usunięcie w ciągu 48 godzin
+                    </p>
+                </div>
+                
+                <div class="section">
+                    <h3>Co się stanie po usunięciu?</h3>
+                    <ul>
+                        <li><span class="checkmark">✅</span> Wszystkie Twoje lokalne dane zostaną trwale usunięte</li>
+                        <li><span class="checkmark">✅</span> Twój identyfikator ReHelp stanie się nieaktywny</li>
+                        <li><span class="checkmark">✅</span> Kontakty Circle nie będą już otrzymywać od Ciebie alertów</li>
+                        <li><span class="checkmark">✅</span> Historia alertów SOS zostanie usunięta</li>
+                        <li><span class="checkmark">✅</span> Informacje z karty medycznej zostaną usunięte</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3>Czas przetwarzania</h3>
+                    <p><strong>Usunięcie lokalne (Metody 1 i 2):</strong> Natychmiastowe</p>
+                    <p><strong>Potwierdzenie e-mail (Metoda 3):</strong> W ciągu 48 godzin</p>
+                </div>
+            </div>
+            
+            <!-- PORTUGUESE -->
+            <div id="pt" class="lang-content">
+                <div class="section">
+                    <h2>Eliminar os seus dados</h2>
+                    <p>A ReHelp respeita o seu direito à privacidade e proteção de dados. Pode solicitar a eliminação de todos os seus dados a qualquer momento.</p>
+                </div>
+                
+                <div class="important-note">
+                    <p><strong>⚠️ Importante:</strong> A ReHelp utiliza uma arquitetura <strong>"offline-first"</strong>. Todos os seus dados são armazenados <strong>LOCALMENTE no seu dispositivo</strong>, não nos nossos servidores. Isto significa que já tem controlo total sobre os seus dados!</p>
+                </div>
+                
+                <div class="section">
+                    <h3>Que dados a ReHelp armazena?</h3>
+                    <p><strong>Localmente no seu telefone:</strong></p>
+                    <ul>
+                        <li>O seu ID ReHelp</li>
+                        <li>A sua lista de contactos Circle</li>
+                        <li>Informações do cartão médico (se adicionadas)</li>
+                        <li>Histórico de alertas SOS</li>
+                        <li>Definições da aplicação</li>
+                    </ul>
+                    <p><strong>NÃO armazenado nos nossos servidores:</strong></p>
+                    <ul>
+                        <li>Sem cópias de segurança na nuvem</li>
+                        <li>Sem rastreamento ou análise</li>
+                        <li>Sem informações pessoais em servidores externos</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3>Como eliminar os seus dados:</h3>
+                    
+                    <div class="steps">
+                        <h4>Método 1: Desinstalar a aplicação (Mais fácil)</h4>
+                        <ol>
+                            <li>Abra as definições do Android</li>
+                            <li>Vá para Aplicações → ReHelp</li>
+                            <li>Toque em "Desinstalar"</li>
+                            <li><span class="checkmark">✅</span> Todos os seus dados são automaticamente eliminados do seu dispositivo!</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="steps">
+                        <h4>Método 2: Limpar dados da aplicação</h4>
+                        <ol>
+                            <li>Definições do Android → Aplicações → ReHelp</li>
+                            <li>Armazenamento → Limpar dados</li>
+                            <li><span class="checkmark">✅</span> Todos os dados eliminados (a aplicação permanece instalada)</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="steps">
+                        <h4>Método 3: Pedido por e-mail</h4>
+                        <p>Se desejar confirmação por escrito da eliminação de dados ou tiver questões:</p>
+                    </div>
+                </div>
+                
+                <div class="contact-box">
+                    <h3>Enviar pedido de eliminação</h3>
+                    <p>Clique no botão abaixo para nos enviar um e-mail:</p>
+                    <a href="mailto:shortmainstory@gmail.com?subject=Pedido de eliminação de dados ReHelp&body=Por favor, confirme a eliminação dos meus dados da ReHelp.%0D%0A%0D%0AO meu ID ReHelp: [INSIRA O SEU ID AQUI]%0D%0A%0D%0AObrigado!" class="email-link">
+                        📧 Enviar pedido de eliminação
+                    </a>
+                    <p style="margin-top: 15px; font-size: 14px; color: #666;">
+                        Confirmaremos a eliminação em 48 horas
+                    </p>
+                </div>
+                
+                <div class="section">
+                    <h3>O que acontece após a eliminação?</h3>
+                    <ul>
+                        <li><span class="checkmark">✅</span> Todos os seus dados locais são permanentemente eliminados</li>
+                        <li><span class="checkmark">✅</span> O seu ID ReHelp torna-se inativo</li>
+                        <li><span class="checkmark">✅</span> Os contactos Circle deixarão de receber alertas seus</li>
+                        <li><span class="checkmark">✅</span> O histórico de alertas SOS é removido</li>
+                        <li><span class="checkmark">✅</span> As informações do cartão médico são eliminadas</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3>Tempo de processamento</h3>
+                    <p><strong>Eliminação local (Métodos 1 e 2):</strong> Imediata</p>
+                    <p><strong>Confirmação por e-mail (Método 3):</strong> Em 48 horas</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>ReHelp</strong> - Privacy-First Safety App</p>
+            <p style="margin-top: 10px;">Your safety. Your data. Your control.</p>
+            <p style="margin-top: 15px; font-size: 12px; opacity: 0.8;">
+                Last updated: March 2026 | © 2026 Short Main Story Labs
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        function switchLanguage(lang) {
+            // Hide all content
+            document.querySelectorAll('.lang-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Show selected content
+            document.getElementById(lang).classList.add('active');
+            
+            // Scroll to top smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Set default language based on browser
+        document.addEventListener('DOMContentLoaded', function() {
+            const browserLang = navigator.language.split('-')[0];
+            const supportedLangs = ['en', 'uk', 'de', 'es', 'fr', 'it', 'pl', 'pt'];
+            
+            if (supportedLangs.includes(browserLang)) {
+                document.getElementById('language-select').value = browserLang;
+                switchLanguage(browserLang);
+            }
+        });
+    </script>
+</body>
+</html>
